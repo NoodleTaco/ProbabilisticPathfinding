@@ -13,13 +13,15 @@ public class Ship {
     private ArrayList<Tile> neighbors;
     private ArrayList<Tile> deadEnds;
 
+    static final int defaultShipLength = 50;
+
     /**
      * Default constructor for a Ship with a ship edge length of 50.
      */    
     public Ship()
     {
-        this.shipEdgeLength = 50;
-        ship = new Tile[50][50];
+        this.shipEdgeLength = defaultShipLength;
+        ship = new Tile[defaultShipLength][defaultShipLength];
         neighbors = new ArrayList<Tile>();
         deadEnds = new ArrayList<Tile>();
     }
