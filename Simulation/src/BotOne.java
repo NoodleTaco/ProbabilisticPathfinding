@@ -24,13 +24,12 @@ public class BotOne extends Bot{
 
     public boolean sense(Tile leak, Ship ship)
     {
-        int detectionArea = 2*k-1;
-            
-        int startX = Math.max(botPosition.getRow() - detectionArea, 0);
-        int endX = Math.min(botPosition.getRow() + detectionArea,ship.getShipEdgeLength());
         
-        int startY = Math.max(botPosition.getCol() - detectionArea, 0);
-        int endY = Math.min(botPosition.getCol() + detectionArea,ship.getShipEdgeLength());
+        int startX = Math.max(botPosition.getRow() - k, 0);
+        int endX = Math.min(botPosition.getRow() + k,ship.getShipEdgeLength() -1);
+        
+        int startY = Math.max(botPosition.getCol() - k, 0);
+        int endY = Math.min(botPosition.getCol() + k,ship.getShipEdgeLength() -1);
 
         return leak.getRow() >= startX && leak.getRow() <= endX && leak.getCol() >= startY && leak.getCol() <= endY;
 
@@ -50,7 +49,7 @@ public class BotOne extends Bot{
             {
                 fillNonLeakTilesClose(ship);
             }
-            bfsPossibleLeak(ship);
+            bfsNotInSet(ship, nonLeakTiles);
         }
 
         else
@@ -71,17 +70,16 @@ public class BotOne extends Bot{
 
     private void fillNonLeakTilesClose(Ship ship)
     {
-        int detectionArea = 2*k-1;
             
-        int startX = Math.max(botPosition.getRow() - detectionArea, 0);
-        int endX = Math.min(botPosition.getRow() + detectionArea,ship.getShipEdgeLength());
+        int startX = Math.max(botPosition.getRow() - k, 0);
+        int endX = Math.min(botPosition.getRow() + k,ship.getShipEdgeLength() -1);
         
-        int startY = Math.max(botPosition.getCol() - detectionArea, 0);
-        int endY = Math.min(botPosition.getCol() + detectionArea,ship.getShipEdgeLength());
+        int startY = Math.max(botPosition.getCol() - k, 0);
+        int endY = Math.min(botPosition.getCol() + k,ship.getShipEdgeLength() -1);
 
-        for (int x = startX; x < endX; x++)
+        for (int x = startX; x <= endX; x++)
         {
-            for (int y = startY; y< endY; y++)
+            for (int y = startY; y<= endY; y++)
             {
                 if(ship.getShipTile(x, y).getOpen())
                 {
@@ -94,13 +92,13 @@ public class BotOne extends Bot{
 
     private void fillNonLeakTilesFar(Ship ship)
     {
-        int detectionArea = 2*k-1;
-            
-        int startX = Math.max(botPosition.getRow() - detectionArea, 0);
-        int endX = Math.min(botPosition.getRow() + detectionArea,ship.getShipEdgeLength());
         
-        int startY = Math.max(botPosition.getCol() - detectionArea, 0);
-        int endY = Math.min(botPosition.getCol() + detectionArea,ship.getShipEdgeLength());
+            
+        int startX = Math.max(botPosition.getRow() - k, 0);
+        int endX = Math.min(botPosition.getRow() + k,ship.getShipEdgeLength() -1);
+        
+        int startY = Math.max(botPosition.getCol() - k, 0);
+        int endY = Math.min(botPosition.getCol() + k,ship.getShipEdgeLength() -1);
 
         for (int x = 0; x < ship.getShipEdgeLength(); x++)
         {
@@ -114,61 +112,7 @@ public class BotOne extends Bot{
         }
     }
 
-    private void bfsPossibleLeak(Ship ship)
-    //Hashsets are iterated without a particular order, this provides functionality that ties in distance are broken randomly. 
-    {
-        Queue<Tile> queue = new LinkedList<>();
-        Set<Tile> visited = new HashSet<>();
-        Map<Tile, Tile> parent = new HashMap<>();
-        Set<Tile> botNeighbors = new HashSet<Tile>();
-
-        queue.add(botPosition);
-        visited.add(botPosition);
-        parent.put(botPosition, null);
-
-        Tile currentTile = getBotPosition();
-
-        while(!queue.isEmpty())
-        {
-            Tile curr = queue.poll();
-
-            if(curr.getOpen() && !nonLeakTiles.contains(curr))
-            {
-                currentTile = curr;
-                break;
-            }
-
-
-
-            ship.fillNeighborsSet(curr, botNeighbors);
-
-            for(Tile tile : botNeighbors)
-            {
-                if(!visited.contains(tile))
-                {
-                    queue.add(tile);
-                    visited.add(tile);
-                    parent.put(tile, curr);
-                }
-            }
-
-            botNeighbors.clear();
-        }
-
-        while(currentTile != null)
-        {
-            botPath.add(currentTile);
-            currentTile = parent.get(currentTile);
-        }
-
-        
-
-        Collections.reverse(botPath);
-
-        botPath.remove(0);
-
-        
-    }
+    
 
 
 
