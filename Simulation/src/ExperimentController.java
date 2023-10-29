@@ -168,7 +168,7 @@ public class ExperimentController{
     public static void main(String [] args)
 	{
         ExperimentController experimentController = new ExperimentController();
-        experimentController.setBotOne(5);
+        experimentController.setBotOne(4);
         System.out.println(experimentController.runExperiment());
         
         
