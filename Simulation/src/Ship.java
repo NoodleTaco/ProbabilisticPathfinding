@@ -13,7 +13,7 @@ public class Ship {
     private ArrayList<Tile> neighbors;
     private ArrayList<Tile> deadEnds;
 
-    static final int defaultShipLength = 50;
+    static final int defaultShipLength = 30;
 
     /**
      * Default constructor for a Ship with a ship edge length of 50.
@@ -146,7 +146,7 @@ public class Ship {
      * @param tile The tile whose neighbors are being considered
      * @param list The list where tile objects are being added 
      */
-    private void fillNeighborsList(Tile tile, ArrayList<Tile> list)
+    public void fillNeighborsList(Tile tile, ArrayList<Tile> list)
     {
         if(tile.getRow() + 1 < shipEdgeLength && getShipTile(tile.getRow() + 1, tile.getCol()).getOpen() && !list.contains(getShipTile(tile.getRow() + 1, tile.getCol()))) 
         {
@@ -175,7 +175,7 @@ public class Ship {
      * @param tile The tile whose neighbors are being considered
      * @param set The set where tile objects are being added 
      */
-    private void fillNeighborsSet(Tile tile, Set<Tile> set)
+    public void fillNeighborsSet(Tile tile, Set<Tile> set)
     {
         if(tile.getRow() + 1 < shipEdgeLength && getShipTile(tile.getRow() + 1, tile.getCol()).getOpen()) 
         {

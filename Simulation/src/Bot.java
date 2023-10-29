@@ -13,7 +13,9 @@ public abstract class Bot{
     /**
      * No Arg Constructor
      */
-    public Bot(){
+    public Bot()
+    {
+        botPath = new ArrayList<Tile>();
     }
 
     public void setBotPosition(Tile tile)
@@ -26,8 +28,16 @@ public abstract class Bot{
         return botPosition;
     }
 
+    public ArrayList<Tile> getBotPath()
+    {
+        return botPath;
+    }
+
     public abstract boolean sense(Tile leak, Ship ship);
 
+    public abstract void botAction(Tile leak, Ship ship);
+
+    public abstract void setNoLeakOnBot();
 
 
 

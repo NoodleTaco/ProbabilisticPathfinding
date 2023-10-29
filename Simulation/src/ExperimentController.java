@@ -50,9 +50,59 @@ public class ExperimentController{
         */
     }
 
+    public int runExperiment()
+    {
+        int numActions = 0;
+        //int count = 25;
+
+        spawnOutsideOfDetection();
+
+        printShip();
+
+        System.out.println();
+        while(true)
+        {
+            if(bot.getBotPosition().equals(leak))
+            {
+                break;
+            }
+
+            bot.setNoLeakOnBot();
+
+            bot.botAction(leak, ship);
+
+            numActions++;
+
+
+            //count--;
+
+            printShip();
+
+            System.out.println();
+        }
+
+
+        return numActions;
+    }
+
     public void setBotOne(int k)
     {
         bot = new BotOne(k);
+    }
+
+    public Bot getBot()
+    {
+        return bot;
+    }
+
+    public Tile getLeak()
+    {
+        return leak;
+    }
+
+    public Ship getShip()
+    {
+        return ship;
     }
      /**
      * Prints a visual representation of the ship for testing purposes.
@@ -66,6 +116,7 @@ public class ExperimentController{
     private void printShip()
     {
         String reset = "\u001B[0m";
+        String lightYellow = "\u001B[93m";
         String red = "\u001B[31m";
         String green = "\u001B[32m";
         String blue = "\u001B[34m";
@@ -73,6 +124,7 @@ public class ExperimentController{
         String purple = "\u001B[35m";
         String orange = "\u001B[33m";
 
+        BotOne botOne = (BotOne)bot;
 
         for(int row = 0; row < ship.getShipEdgeLength(); row++)
         {
@@ -89,9 +141,14 @@ public class ExperimentController{
                     System.out.print(purple + "■ " + reset);
                 }
 
-                else if(bot.sense(ship.getShipTile(row, col), ship))
+                else if(bot.getBotPath().contains(ship.getShipTile(row, col)))
                 {
-                     System.out.print(red + "■ " + reset);
+                    System.out.print(red + "■ " + reset);
+                }
+
+                else if(botOne.getNonLeakTiles().contains(ship.getShipTile(row, col)))
+                {
+                     System.out.print(lightYellow + "■ " + reset);
                 }
 
                 else if(ship.getShipTile(row, col).getOpen())
@@ -111,9 +168,9 @@ public class ExperimentController{
     public static void main(String [] args)
 	{
         ExperimentController experimentController = new ExperimentController();
-        experimentController.setBotOne(2);
-        experimentController.spawnOutsideOfDetection();
-        experimentController.printShip();
+        experimentController.setBotOne(5);
+        System.out.println(experimentController.runExperiment());
+        
         
 	}
 
