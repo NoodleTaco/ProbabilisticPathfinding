@@ -8,9 +8,9 @@ import java.util.Queue;
 import java.util.Set;
 
 public class BotOne extends Bot{
-    private int k;
+    protected int k;
 
-    private HashSet<Tile> nonLeakTiles;
+    protected HashSet<Tile> nonLeakTiles;
 
     public BotOne() {}
 

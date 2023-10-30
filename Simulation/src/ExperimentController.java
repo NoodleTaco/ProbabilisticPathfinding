@@ -1,10 +1,13 @@
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.HashSet;
 
 public class ExperimentController{
     private Ship ship;
 
     private Bot bot;
+
+    private Tile botSpawnLocation;
 
     private Tile leak;
 
@@ -20,7 +23,7 @@ public class ExperimentController{
     public void spawnOutsideOfDetection()
     {
         
-        ship.formShip();
+        
 
         Random rand = new Random();
 
@@ -48,6 +51,18 @@ public class ExperimentController{
         System.out.println("Button Starting Position: " + button.toString());
         System.out.println("Leak Starting Position: " + leak.toString());
         */
+    }
+
+    private boolean testSense(Tile leak, Tile botStartingPosition, int k)
+    {
+        int startX = Math.max(botStartingPosition.getRow() - k, 0);
+        int endX = Math.min(botStartingPosition.getRow() + k,ship.getShipEdgeLength() -1);
+        
+        int startY = Math.max(botStartingPosition.getCol() - k, 0);
+        int endY = Math.min(botStartingPosition.getCol() + k,ship.getShipEdgeLength() -1);
+
+        return leak.getRow() >= startX && leak.getRow() <= endX && leak.getCol() >= startY && leak.getCol() <= endY;
+
     }
 
     public int runExperiment()
@@ -88,6 +103,14 @@ public class ExperimentController{
     public void setBotOne(int k)
     {
         bot = new BotOne(k);
+    }
+
+    public void setBotTwo(int k)
+    {
+        bot = new BotTwo(k);
+        BotTwo botTwo = (BotTwo)bot;
+        botTwo.setSenseLocations(ship);
+        
     }
 
     public Bot getBot()
@@ -167,9 +190,21 @@ public class ExperimentController{
 
     public static void main(String [] args)
 	{
+        /*
         ExperimentController experimentController = new ExperimentController();
         experimentController.setBotOne(5);
         System.out.println(experimentController.runExperiment());
+        */
+
+        ExperimentController experimentController = new ExperimentController();
+        experimentController.getShip().formShip();
+        experimentController.setBotTwo(1);
+        experimentController.spawnOutsideOfDetection();
+        BotTwo botTwo = (BotTwo)experimentController.getBot();
+        botTwo.setSenseLocations(experimentController.getShip());
+        botTwo.printSenseLocations();
+
+
         
         
 	}
