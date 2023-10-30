@@ -51,14 +51,13 @@ public class BotOne extends Bot{
             }
             bfsNotInSet(ship, nonLeakTiles);
         }
-
         else
         {
             botMove();
         }
     }
 
-    private void botMove()
+    protected void botMove()
     {
         if(botPath.isEmpty())
         {
@@ -68,7 +67,7 @@ public class BotOne extends Bot{
 
     }
 
-    private void fillNonLeakTilesClose(Ship ship)
+    protected void fillNonLeakTilesClose(Ship ship)
     {
             
         int startX = Math.max(botPosition.getRow() - k, 0);
@@ -90,7 +89,7 @@ public class BotOne extends Bot{
         }
     }
 
-    private void fillNonLeakTilesFar(Ship ship)
+    protected void fillNonLeakTilesFar(Ship ship)
     {
         
             

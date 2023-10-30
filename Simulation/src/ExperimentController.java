@@ -146,8 +146,12 @@ public class ExperimentController{
         String white = "\u001B[37m";
         String purple = "\u001B[35m";
         String orange = "\u001B[33m";
+        String black = "\u001B[30m";
 
-        BotOne botOne = (BotOne)bot;
+
+        //BotOne botOne = (BotOne)bot;
+
+        BotTwo botTwo = (BotTwo)bot;
 
         for(int row = 0; row < ship.getShipEdgeLength(); row++)
         {
@@ -169,9 +173,22 @@ public class ExperimentController{
                     System.out.print(red + "■ " + reset);
                 }
 
-                else if(botOne.getNonLeakTiles().contains(ship.getShipTile(row, col)))
+                else if(botTwo.getNonLeakTiles().contains(ship.getShipTile(row, col)))
                 {
                      System.out.print(lightYellow + "■ " + reset);
+                }
+
+                else if(botTwo.getSenseLocations().contains(ship.getShipTile(row, col)))
+                {
+                    if(ship.getShipTile(row, col).getOpen())
+                    {
+                        System.out.print(black + "■ " + reset);
+                    }
+                    else 
+                    {
+                        System.out.print(green + "■ " + reset);
+                    }
+
                 }
 
                 else if(ship.getShipTile(row, col).getOpen())
@@ -196,13 +213,22 @@ public class ExperimentController{
         System.out.println(experimentController.runExperiment());
         */
 
+        /*
         ExperimentController experimentController = new ExperimentController();
         experimentController.getShip().formShip();
-        experimentController.setBotTwo(1);
+        experimentController.setBotTwo(3);
         experimentController.spawnOutsideOfDetection();
         BotTwo botTwo = (BotTwo)experimentController.getBot();
-        botTwo.setSenseLocations(experimentController.getShip());
         botTwo.printSenseLocations();
+         */
+        
+
+        ExperimentController experimentController = new ExperimentController();
+        experimentController.getShip().formShip();
+        experimentController.setBotTwo(2);
+        System.out.println(experimentController.runExperiment());
+
+        
 
 
         
