@@ -49,7 +49,7 @@ public class BotOne extends Bot{
             {
                 fillNonLeakTilesClose(ship);
             }
-            bfsNotInSet(ship, nonLeakTiles);
+            bfsNotInSet(ship, nonLeakTiles,botPath, botPosition);
         }
         else
         {

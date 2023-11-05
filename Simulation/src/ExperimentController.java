@@ -113,6 +113,12 @@ public class ExperimentController{
         
     }
 
+    public void setBotThree(double alpha){
+        bot = new BotThree(alpha);
+        BotThree botThree = (BotThree)bot;
+        botThree.initalizeProbabilities(ship);
+    }
+
     public Bot getBot()
     {
         return bot;

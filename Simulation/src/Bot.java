@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
+import java.util.Random;
 import java.util.Set;
 
 /**
@@ -25,7 +26,7 @@ public abstract class Bot{
         botPath = new ArrayList<Tile>();
     }
 
-    protected void bfsNotInSet(Ship ship, HashSet<Tile> set)
+    protected void bfsNotInSet(Ship ship, HashSet<Tile> set, ArrayList<Tile> list, Tile startingTile)
     //Hashsets are iterated without a particular order, this provides functionality that ties in distance are broken randomly. 
     {
         Queue<Tile> queue = new LinkedList<>();
@@ -33,11 +34,11 @@ public abstract class Bot{
         Map<Tile, Tile> parent = new HashMap<>();
         Set<Tile> botNeighbors = new HashSet<Tile>();
 
-        queue.add(botPosition);
-        visited.add(botPosition);
-        parent.put(botPosition, null);
+        queue.add(startingTile);
+        visited.add(startingTile);
+        parent.put(startingTile, null);
 
-        Tile currentTile = getBotPosition();
+        Tile currentTile = startingTile;
 
         while(!queue.isEmpty())
         {
@@ -68,20 +69,20 @@ public abstract class Bot{
 
         while(currentTile != null)
         {
-            botPath.add(currentTile);
+            list.add(currentTile);
             currentTile = parent.get(currentTile);
         }
 
         
 
-        Collections.reverse(botPath);
+        Collections.reverse(list);
 
-        botPath.remove(0);
+        list.remove(0);
 
         
     }
 
-    protected void bfsInSet(Ship ship, HashSet<Tile> set)
+    protected void bfsInSet(Ship ship, HashSet<Tile> set, ArrayList<Tile> list, Tile startingTile)
     //Hashsets are iterated without a particular order, this provides functionality that ties in distance are broken randomly. 
     {
         Queue<Tile> queue = new LinkedList<>();
@@ -89,12 +90,11 @@ public abstract class Bot{
         Map<Tile, Tile> parent = new HashMap<>();
         Set<Tile> botNeighbors = new HashSet<Tile>();
 
-        queue.add(botPosition);
-        visited.add(botPosition);
-        parent.put(botPosition, null);
+        queue.add(startingTile);
+        visited.add(startingTile);
+        parent.put(startingTile, null);
 
-        Tile currentTile = getBotPosition();
-
+        Tile currentTile = startingTile;
         while(!queue.isEmpty())
         {
             Tile curr = queue.poll();
@@ -124,17 +124,24 @@ public abstract class Bot{
 
         while(currentTile != null)
         {
-            botPath.add(currentTile);
+            list.add(currentTile);
             currentTile = parent.get(currentTile);
         }
 
         
 
-        Collections.reverse(botPath);
+        Collections.reverse(list);
 
-        botPath.remove(0);
+        list.remove(0);
 
         
+    }
+
+    public boolean probabilityRoll(double probability)
+    {
+        Random rand = new Random();
+        double randomValue = rand.nextDouble();         
+        return randomValue < probability;
     }
 
     public void setBotPosition(Tile tile)

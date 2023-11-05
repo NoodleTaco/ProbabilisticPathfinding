@@ -34,12 +34,12 @@ public class BotTwo extends BotOne{
                 else
                 {
                     fillNonLeakTilesClose(ship);
-                    bfsInSet(ship, senseLocations);
+                    bfsInSet(ship, senseLocations, botPath, botPosition);
                 }
             }
             else if(botPath.isEmpty())
             {
-                bfsInSet(ship, senseLocations);
+                bfsInSet(ship, senseLocations, botPath, botPosition);
                 botMove();
             }
             else
@@ -51,7 +51,7 @@ public class BotTwo extends BotOne{
         {
             if(botPath.isEmpty())
             {
-                bfsNotInSet(ship, nonLeakTiles);
+                bfsNotInSet(ship, nonLeakTiles, botPath, botPosition);
             }
             botMove();
         }
