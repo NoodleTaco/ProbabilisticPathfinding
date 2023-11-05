@@ -40,17 +40,14 @@ public class BotThree extends Bot{
 
     @Override
     public boolean sense(Tile leak, Ship ship) {
-        int distanceToLeak = distanceToLeak(leak, ship, botPosition);
-
-        double e = Math.E;
-
-        double probability = Math.pow(e, -1 * alpha * (distanceToLeak-1));
-
-        return probabilityRoll(probability);
+        return probabilityRoll(formula(leak, botPosition, ship));
     }
 
     private int distanceToLeak(Tile leak, Ship ship, Tile startingTile)
     {
+        if(startingTile.equals(leak)){
+            return 0;
+        }
         HashSet<Tile> leakSet = new HashSet<Tile>();
         leakSet.add(leak);
         ArrayList<Tile> path = new ArrayList<Tile>();
@@ -67,14 +64,57 @@ public class BotThree extends Bot{
         }
         else{
             if(sense(leak, ship)){
-                //TODO update all probabilities when you get a beep
+                updateProbabilitiesFromSense(ship, true);
             }
             else{
-                //TODO update all probabilities if you didn't get a beep
+                updateProbabilitiesFromSense(ship, false);
             }
             getHighestProbabilities();
             bfsInSet(ship, highestProbabilties, botPath, botPosition);
         }
+    }
+
+    private void updateProbabilitiesFromSense(Ship ship, boolean beep){
+
+        Iterator<Map.Entry<Tile, Double>> firstRun = tileProbabilities.entrySet().iterator();
+
+        double beepInI = 0;
+
+        //P(beep in i) only needs to be calculated once 
+        while(firstRun.hasNext()){
+            Map.Entry<Tile, Double> entry = firstRun.next();
+            double toAdd = entry.getValue() * formula(entry.getKey(), botPosition, ship);
+            beepInI += toAdd;
+        }
+
+        //If there was no beep, the probability of there being no beep in i = 1 - beepInI since they have to add up to 1
+        if(!beep){
+            beepInI = 1 - beepInI;
+        }
+
+        Iterator<Map.Entry<Tile, Double>> iterator = tileProbabilities.entrySet().iterator();
+
+        //Adjust each tile's probability by dividing it by 1 - <the original probaiblity of the tile determined to have no leak>
+        while(iterator.hasNext()){
+            Map.Entry<Tile, Double> entry = iterator.next();
+            double leakInJ = entry.getValue();
+
+            double beepInIGivenLeakInJ = formula(entry.getKey(), botPosition, ship);
+
+            //Update the probability of cell j through formula P(leak in j | beep in cell i) = P(beep in cell i | leak in j) * P(leak in j) / P(beep in i)
+            tileProbabilities.put(entry.getKey(), leakInJ * beepInIGivenLeakInJ / beepInI);
+        }
+    }
+
+    private double formula(Tile goal, Tile start, Ship ship ){
+        double e = Math.E;
+        int distanceToLeak = distanceToLeak(goal, ship, start);
+
+        //Covers the case where the formula is ran on the cell that contains the leak
+        if(distanceToLeak == 0){
+            distanceToLeak = 1;
+        }
+        return Math.pow(e, -1 * alpha * (distanceToLeak-1));
     }
 
     protected void botMove()
@@ -94,8 +134,20 @@ public class BotThree extends Bot{
      */
     @Override
     public void setNoLeakOnBot() {
+
+        double tileProbability = tileProbabilities.get(botPosition);
+
         tileProbabilities.put(botPosition, 0.0);
-        //TODO update all probabilities based on one tile's probability being set to 0
+
+        Iterator<Map.Entry<Tile, Double>> iterator = tileProbabilities.entrySet().iterator();
+
+        //Adjust each tile's probability by dividing it by 1 - <the original probaiblity of the tile determined to have no leak>
+        while(iterator.hasNext()){
+            Map.Entry<Tile, Double> entry = iterator.next();
+            tileProbabilities.put(entry.getKey(), entry.getValue() / (1 - tileProbability));
+        }
+        
+
     }
 
     /**
@@ -106,8 +158,6 @@ public class BotThree extends Bot{
         Iterator<Map.Entry<Tile, Double>> iterator = tileProbabilities.entrySet().iterator();
         while(iterator.hasNext()){
             Map.Entry<Tile, Double> entry = iterator.next();
-            Tile tile = entry.getKey();
-            Double probability = entry.getValue();
             if(entry.getValue() > max)
             {
                 highestProbabilties.clear();
