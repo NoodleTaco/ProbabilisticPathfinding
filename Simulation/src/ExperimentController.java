@@ -142,7 +142,7 @@ public class ExperimentController{
      * White represents a plain open tile
      * Green represents a closed tile
      */
-    private void printShip()
+    public void printShip()
     {
         String reset = "\u001B[0m";
         String lightYellow = "\u001B[93m";
@@ -157,7 +157,7 @@ public class ExperimentController{
 
         //BotOne botOne = (BotOne)bot;
 
-        BotTwo botTwo = (BotTwo)bot;
+        //BotTwo botTwo = (BotTwo)bot;
 
         for(int row = 0; row < ship.getShipEdgeLength(); row++)
         {
@@ -174,15 +174,18 @@ public class ExperimentController{
                     System.out.print(purple + "■ " + reset);
                 }
 
+
                 else if(bot.getBotPath().contains(ship.getShipTile(row, col)))
                 {
                     System.out.print(red + "■ " + reset);
                 }
 
+                /* 
                 else if(botTwo.getNonLeakTiles().contains(ship.getShipTile(row, col)))
                 {
                      System.out.print(lightYellow + "■ " + reset);
                 }
+                
 
                 else if(botTwo.getSenseLocations().contains(ship.getShipTile(row, col)))
                 {
@@ -196,6 +199,83 @@ public class ExperimentController{
                     }
 
                 }
+                */
+
+                else if(ship.getShipTile(row, col).getOpen())
+                {
+                    System.out.print(white + "■ " + reset);
+                }
+
+                else 
+                {
+                    System.out.print(green + "■ " + reset);
+                }
+            }
+            System.out.println();
+        }
+    }
+
+    public void printShipBotThree(){
+        String reset = "\u001B[0m";
+        String lightYellow = "\u001B[93m";
+        String red = "\u001B[31m";
+        String green = "\u001B[32m";
+        String blue = "\u001B[34m";
+        String white = "\u001B[37m";
+        String purple = "\u001B[35m";
+        String orange = "\u001B[33m";
+        String black = "\u001B[30m";
+
+
+        //BotOne botOne = (BotOne)bot;
+
+        //BotTwo botTwo = (BotTwo)bot;
+
+        BotThree botThree = (BotThree)bot;
+
+        for(int row = 0; row < ship.getShipEdgeLength(); row++)
+        {
+            for (int col = 0; col < ship.getShipEdgeLength(); col++)
+            {
+
+                if(bot.getBotPosition().equals(ship.getShipTile(row, col)))
+                {
+                    System.out.print(blue + "■ " + reset);
+                }
+
+                else if(leak.equals(ship.getShipTile(row, col)))
+                {
+                    System.out.print(purple + "■ " + reset);
+                }
+
+
+                else if(bot.getBotPath().contains(ship.getShipTile(row, col)))
+                {
+                    System.out.print(red + "■ " + reset);
+                }
+
+                
+
+                /* 
+                else if(botTwo.getNonLeakTiles().contains(ship.getShipTile(row, col)))
+                {
+                     System.out.print(lightYellow + "■ " + reset);
+                }
+                
+
+                else if(botTwo.getSenseLocations().contains(ship.getShipTile(row, col)))
+                {
+                    if(ship.getShipTile(row, col).getOpen())
+                    {
+                        System.out.print(black + "■ " + reset);
+                    }
+                    else 
+                    {
+                        System.out.print(green + "■ " + reset);
+                    }
+
+                }
+                */
 
                 else if(ship.getShipTile(row, col).getOpen())
                 {

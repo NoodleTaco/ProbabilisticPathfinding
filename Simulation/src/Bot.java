@@ -137,6 +137,59 @@ public abstract class Bot{
         
     }
 
+    protected void bfsInSetWithExceptions(Ship ship, HashSet<Tile> set, ArrayList<Tile> list, Tile startingTile, Set<Tile> exceptions)
+    //Hashsets are iterated without a particular order, this provides functionality that ties in distance are broken randomly. 
+    {
+        Queue<Tile> queue = new LinkedList<>();
+        Set<Tile> visited = new HashSet<>();
+        Map<Tile, Tile> parent = new HashMap<>();
+        Set<Tile> botNeighbors = new HashSet<Tile>();
+
+        queue.add(startingTile);
+        visited.add(startingTile);
+        parent.put(startingTile, null);
+
+        Tile currentTile = startingTile;
+        while(!queue.isEmpty())
+        {
+            Tile curr = queue.poll();
+
+            if(set.contains(curr))
+            {
+                currentTile = curr;
+                break;
+            }
+
+            ship.fillNeighborsListException(curr, botNeighbors, exceptions);
+
+            for(Tile tile : botNeighbors)
+            {
+                if(!visited.contains(tile))
+                {
+                    queue.add(tile);
+                    visited.add(tile);
+                    parent.put(tile, curr);
+                }
+            }
+
+            botNeighbors.clear();
+        }
+
+        while(currentTile != null)
+        {
+            list.add(currentTile);
+            currentTile = parent.get(currentTile);
+        }
+
+        
+
+        Collections.reverse(list);
+
+        list.remove(0);
+
+        
+    }
+
     public boolean probabilityRoll(double probability)
     {
         Random rand = new Random();

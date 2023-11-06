@@ -1,6 +1,7 @@
 import java.util.Random;
 import java.util.Set;
 import java.util.ArrayList;
+import java.util.HashSet;
 /**
  * Defines the Ship where the simulation takes place
  * An instance of this method defines one ship 
@@ -13,7 +14,7 @@ public class Ship {
     private ArrayList<Tile> neighbors;
     private ArrayList<Tile> deadEnds;
 
-    static final int defaultShipLength = 15;
+    static final int defaultShipLength = 5;
 
     /**
      * Default constructor for a Ship with a ship edge length of 50.
@@ -171,6 +172,35 @@ public class Ship {
     }
 
     /**
+     * Fills the list parameter with neighbors of a tile that are open or are equal to a provided tile
+     * @param tile The tile which neighbor's are being check
+     * @param list The list where appropriate tiles will be added
+     * @param exceptionOne A goal tile which will be added even if it is closed
+     */
+    public void fillNeighborsListException(Tile tile, Set<Tile> set, Set<Tile> exceptions){
+
+        if(tile.getRow() + 1 < shipEdgeLength && (getShipTile(tile.getRow() + 1, tile.getCol()).getOpen()||exceptions.contains(getShipTile(tile.getRow() + 1, tile.getCol())))&& !set.contains(getShipTile(tile.getRow() + 1, tile.getCol()))) 
+        {
+            set.add(getShipTile(tile.getRow() + 1, tile.getCol()));
+        }
+
+        if(tile.getRow() - 1 > -1 && (getShipTile(tile.getRow() - 1, tile.getCol()).getOpen() || exceptions.contains(getShipTile(tile.getRow() -1, tile.getCol()))) && !set.contains(getShipTile(tile.getRow() - 1, tile.getCol())))
+        {
+            set.add(getShipTile(tile.getRow() - 1, tile.getCol()));
+        }
+
+        if(tile.getCol() + 1 < shipEdgeLength && (getShipTile(tile.getRow() , tile.getCol() + 1).getOpen()||exceptions.contains(getShipTile(tile.getRow() , tile.getCol() +1))) && !set.contains(getShipTile(tile.getRow() , tile.getCol() + 1)))
+        {
+            set.add(getShipTile(tile.getRow(), tile.getCol() + 1));
+        }
+
+        if(tile.getCol() - 1 > -1 && (getShipTile(tile.getRow() , tile.getCol() -1).getOpen() ||exceptions.contains(getShipTile(tile.getRow() , tile.getCol() -1))) && !set.contains(getShipTile(tile.getRow() , tile.getCol() - 1)))
+        {
+            set.add(getShipTile(tile.getRow(), tile.getCol() -1));
+        }
+    }
+
+    /**
      * Adds open tiles adjacent to a select tile to a set
      * @param tile The tile whose neighbors are being considered
      * @param set The set where tile objects are being added 
@@ -195,6 +225,51 @@ public class Ship {
         if(tile.getCol() - 1 > -1 && getShipTile(tile.getRow() , tile.getCol() -1).getOpen() )
         {
             set.add(getShipTile(tile.getRow(), tile.getCol() -1));
+        }
+    }
+
+    /**
+     * Adds closed tiles adjacent to a select tile to a set
+     * @param tile The tile whose neighbors are being considered
+     * @param set The set where tile objects are being added 
+     */
+    public void fillClosedNeighborsSet(Tile tile, Set<Tile> set){
+        if(tile.getRow() + 1 < shipEdgeLength && !getShipTile(tile.getRow() + 1, tile.getCol()).getOpen()) 
+        {
+            set.add(getShipTile(tile.getRow() + 1, tile.getCol()));
+        }
+
+        if(tile.getRow() - 1 > -1 && !getShipTile(tile.getRow() - 1, tile.getCol()).getOpen() )
+        {
+            set.add(getShipTile(tile.getRow() - 1, tile.getCol()));
+        }
+
+        if(tile.getCol() + 1 < shipEdgeLength && !getShipTile(tile.getRow() , tile.getCol() + 1).getOpen() )
+        {
+            set.add(getShipTile(tile.getRow(), tile.getCol() + 1));
+        }
+
+        if(tile.getCol() - 1 > -1 && !getShipTile(tile.getRow() , tile.getCol() -1).getOpen() )
+        {
+            set.add(getShipTile(tile.getRow(), tile.getCol() -1));
+        }
+    }
+
+    public boolean isCorner(Tile tile){
+        if(tile.getRow() == 0 && tile.getCol() == 0 ){
+            return true;
+        }
+        else if(tile.getRow() == shipEdgeLength-1 && tile.getCol() == 0 ){
+            return true;
+        }
+        else if(tile.getRow() == 0 && tile.getCol() == shipEdgeLength-1 ){
+            return true;
+        }
+        else if(tile.getRow() == shipEdgeLength-1 && tile.getCol() == shipEdgeLength-1 ){
+            return true;
+        }
+        else{
+            return false;
         }
     }
 
