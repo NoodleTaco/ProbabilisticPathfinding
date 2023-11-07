@@ -22,9 +22,6 @@ public class ExperimentController{
      */
     public void spawnOutsideOfDetection()
     {
-        
-        
-
         Random rand = new Random();
 
         while(true)
@@ -72,9 +69,9 @@ public class ExperimentController{
 
         spawnOutsideOfDetection();
 
-        printShip();
+        //printShip();
 
-        System.out.println();
+        //System.out.println();
         while(true)
         {
             if(bot.getBotPosition().equals(leak))
@@ -91,9 +88,9 @@ public class ExperimentController{
 
             //count--;
 
-            printShip();
+            //printShip();
 
-            System.out.println();
+            //System.out.println();
         }
 
 
@@ -117,6 +114,12 @@ public class ExperimentController{
         bot = new BotThree(alpha);
         BotThree botThree = (BotThree)bot;
         botThree.initalizeProbabilities(ship);
+    }
+
+    public void setBotFour(double alpha, int numSenses, int numMoves){
+        bot = new BotFour(alpha, numSenses, numMoves);
+        BotFour botFour = (BotFour)bot;
+        botFour.initalizeProbabilities(ship);
     }
 
     public Bot getBot()
@@ -229,7 +232,7 @@ public class ExperimentController{
 
         //BotOne botOne = (BotOne)bot;
 
-        //BotTwo botTwo = (BotTwo)bot;
+        BotTwo botTwo = (BotTwo)bot;
 
         BotThree botThree = (BotThree)bot;
 
@@ -256,7 +259,7 @@ public class ExperimentController{
 
                 
 
-                /* 
+
                 else if(botTwo.getNonLeakTiles().contains(ship.getShipTile(row, col)))
                 {
                      System.out.print(lightYellow + "■ " + reset);
@@ -275,7 +278,7 @@ public class ExperimentController{
                     }
 
                 }
-                */
+
 
                 else if(ship.getShipTile(row, col).getOpen())
                 {
@@ -311,7 +314,7 @@ public class ExperimentController{
 
         ExperimentController experimentController = new ExperimentController();
         experimentController.getShip().formShip();
-        experimentController.setBotTwo(2);
+        experimentController.setBotTwo(3);
         System.out.println(experimentController.runExperiment());
 
         

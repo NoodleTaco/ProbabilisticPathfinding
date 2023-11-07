@@ -20,40 +20,73 @@ public class BotTwo extends BotOne{
 
     public void botAction(Tile leak, Ship ship)
     {
-        if(!firstSenseFound)
+        if(!firstSenseFound ) 
         {
-            if(botPath.isEmpty() && senseLocations.contains(botPosition))
-            {
-                senseLocations.remove(botPosition);
-                if(sense(leak, ship))
+            if(!senseLocations.isEmpty()){
+                for(Tile tile: senseLocations){
+                    if(!tile.getOpen()){
+                        System.out.println("What the fuck");
+                    }
+                }
+                if(botPath.isEmpty() && senseLocations.contains(botPosition))
                 {
-                    System.out.println("FOUND IT \n RAHHHHHHHHHHH \n RAHHHHHHHHHHH \n RAHHHHHHHHHHH");
-                    fillNonLeakTilesFar(ship);
-                    firstSenseFound = true;
+                    senseLocations.remove(botPosition);
+                    if(sense(leak, ship))
+                    {
+                        fillNonLeakTilesFar(ship);
+                        firstSenseFound = true;
+                    }
+                    else
+                    {
+                        fillNonLeakTilesClose(ship);
+                        bfsInSet(ship, senseLocations, botPath, botPosition);
+                    }
+                }
+                else if(botPath.isEmpty())
+                {
+                    bfsInSet(ship, senseLocations, botPath, botPosition);
+                    botMove();
                 }
                 else
                 {
-                    fillNonLeakTilesClose(ship);
-                    bfsInSet(ship, senseLocations, botPath, botPosition);
+                    botMove();
                 }
-            }
-            else if(botPath.isEmpty())
-            {
-                bfsInSet(ship, senseLocations, botPath, botPosition);
-                botMove();
-            }
-            else
-            {
-                botMove();
+            } 
+            //Called when all senseLocations have been searched and no sense returned true
+            //This case happens when a sense location is placed inside a closed tile without open neighbors and the leak is in that sense's radius
+            else{
+                System.out.println("Sense Locations empty, still going");
+                if(botPath.isEmpty())
+                {
+                    if(sense(leak, ship))
+                    {
+                        //System.out.println("FOUND IT \n RAHHHHHHHHHHH \n RAHHHHHHHHHHH \n RAHHHHHHHHHHH");
+                        fillNonLeakTilesFar(ship);
+                        firstSenseFound = true;
+                    }
+                    else
+                    {
+                        fillNonLeakTilesClose(ship);
+                    }
+                    bfsNotInSet(ship, nonLeakTiles,botPath, botPosition);
+                }
+                else
+                {
+                    botMove();
+                }
             }
         }
         else
         {
+            //System.out.print("First sense found already, looking for leak: ");
             if(botPath.isEmpty())
             {
+                //System.out.print("Finding nearest valid tile");
                 bfsNotInSet(ship, nonLeakTiles, botPath, botPosition);
             }
+            //System.out.print("Moving");
             botMove();
+            //System.out.println();
         }
     }
 
@@ -79,7 +112,7 @@ public class BotTwo extends BotOne{
         {
             if(x == range-1 && extra)
             {
-                System.out.println("Final Row with Extra: row = " + row);
+                //System.out.println("Final Row with Extra: row = " + row);
                 rowToCompute = row;
             }
             else
@@ -91,7 +124,7 @@ public class BotTwo extends BotOne{
             {
                 if(y == range-1 && extra)
                 {
-                    System.out.println("Final Col with Extra: col = " + col);
+                    //System.out.println("Final Col with Extra: col = " + col);
                     colToCompute = col;
                 }
                 else
@@ -103,7 +136,9 @@ public class BotTwo extends BotOne{
                 Tile tileToAdd = ship.getShipTile(rowToCompute, colToCompute);
                 tileToAdd = getOpenNeighborIfClosed(tileToAdd, ship);
 
-                senseLocations.add(tileToAdd);
+                if(tileToAdd != null){
+                    senseLocations.add(tileToAdd);
+                }
                 col += ((2*k)+1);
             }
 
@@ -124,7 +159,7 @@ public class BotTwo extends BotOne{
 
         if(list.isEmpty())
         {
-            return tile;
+            return null;
         }
         else
         {

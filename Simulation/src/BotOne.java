@@ -42,7 +42,7 @@ public class BotOne extends Bot{
         {
             if(sense(leak, ship))
             {
-                System.out.println("FOUND IT \n RAHHHHHHHHHHH \n RAHHHHHHHHHHH \n RAHHHHHHHHHHH");
+                //System.out.println("FOUND IT \n RAHHHHHHHHHHH \n RAHHHHHHHHHHH \n RAHHHHHHHHHHH");
                 fillNonLeakTilesFar(ship);
             }
             else

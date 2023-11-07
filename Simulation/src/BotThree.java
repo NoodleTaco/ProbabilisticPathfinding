@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 import java.util.Iterator;
+import java.text.DecimalFormat;
+
 
 public class BotThree extends Bot{
 
@@ -83,24 +85,26 @@ public class BotThree extends Bot{
         if(!botPath.isEmpty()){
             botMove();
             botPath.clear();
+            printShipProbabilities(ship);
         }
         else{
             if(sense(leak, ship)){
-                //System.out.println("beep");
-                //System.out.println();
+                System.out.println("beep");
+                System.out.println();
                 updateProbabilitiesFromSense(ship, true);
             }
             else{
-                //System.out.println("no beep");
-                //System.out.println();
+                System.out.println("no beep");
+                System.out.println();
                 updateProbabilitiesFromSense(ship, false);
             }
             updateHighestProbabilities();
             bfsInSetWithExceptions(ship, highestProbabilties, botPath, botPosition, highestProbabilties);
+            printShipProbabilities(ship);
         }
     }
 
-    private void updateProbabilitiesFromSense(Ship ship, boolean beep){
+    protected void updateProbabilitiesFromSense(Ship ship, boolean beep){
         
         //System.out.println("Updating Probabilities From Sense: \n");
 
@@ -135,6 +139,10 @@ public class BotThree extends Bot{
 
             double beepInIGivenLeakInJ = formula(entry.getKey(), botPosition, ship);
 
+            if(!beep){
+                beepInIGivenLeakInJ = 1 - beepInIGivenLeakInJ;
+            }
+
             //System.out.print("P(beep in i | leak in j) = " + beepInIGivenLeakInJ + " ");
 
             //Update the probability of cell j through formula P(leak in j | beep in cell i) = P(beep in cell i | leak in j) * P(leak in j) / P(beep in i)
@@ -162,7 +170,10 @@ public class BotThree extends Bot{
         {
             return;
         }
-        botPosition = botPath.remove(0);
+        Tile toMove = botPath.remove(0);
+        if(toMove.getOpen()){
+            botPosition = toMove;
+        }
 
     }
 
@@ -192,7 +203,7 @@ public class BotThree extends Bot{
     /**
      * Loops through the tileProbabilities and adds the tile(s) with the highest probability to the highestProbabilities set
      */
-    private void updateHighestProbabilities(){
+    protected void updateHighestProbabilities(){
         double max = 0;
         Iterator<Map.Entry<Tile, Double>> iterator = tileProbabilities.entrySet().iterator();
         while(iterator.hasNext()){
@@ -207,6 +218,18 @@ public class BotThree extends Bot{
                 highestProbabilties.add(entry.getKey());
             }
         }
+    }
+
+    public void printShipProbabilities(Ship ship){
+        DecimalFormat decimalFormat = new DecimalFormat("0.000");
+
+        for(int row = 0; row < ship.getShipEdgeLength(); row ++){
+            for(int col = 0; col < ship.getShipEdgeLength(); col ++){
+                System.out.print(decimalFormat.format(tileProbabilities.get(ship.getShipTile(row, col))) + " ");
+            }
+            System.out.println();
+        }
+        
     }
 
     public HashMap<Tile, Double> getTileProbabilities(){
@@ -225,8 +248,6 @@ public class BotThree extends Bot{
         ExperimentController experimentController = new ExperimentController();
         experimentController.getShip().formShip();
 
-
-
         experimentController.setBotThree(0.1);
         experimentController.spawnOutsideOfDetection();
 
@@ -244,25 +265,49 @@ public class BotThree extends Bot{
         experimentController.getBot().botAction(experimentController.getLeak(), experimentController.getShip());
         
 
-        for(int row = 0 ; row < experimentController.getShip().getShipEdgeLength(); row ++){
-            for(int col = 0; col < experimentController.getShip().getShipEdgeLength(); col ++){
-                Tile tile = experimentController.getShip().getShipTile(row, col);
-                System.out.println("Tile: " + tile.toString() + " Probability: " +  botThree.getTileProbabilities().get(experimentController.getShip().getShipTile(row, col)));
-            }
-        }
+        experimentController.printShip();
 
         System.out.println();
 
-        botThree.updateHighestProbabilities();
-        for(Tile tile: botThree.getHighestProbabilities()){
-            System.out.println("Tile: " + tile.toString() + " Probability: " +  botThree.getTileProbabilities().get(tile));
-        }
+        botThree.printShipProbabilities(experimentController.getShip());
+
+        experimentController.getBot().botAction(experimentController.getLeak(), experimentController.getShip());
+
+
+        System.out.println("\n");
+
+        experimentController.getBot().botAction(experimentController.getLeak(), experimentController.getShip());
+
+        experimentController.printShip();
+
+        System.out.println();
+
+        botThree.printShipProbabilities(experimentController.getShip());
+
+
+        System.out.println("\n");
+
+        experimentController.getBot().botAction(experimentController.getLeak(), experimentController.getShip());
+
+        experimentController.printShip();
+
+        System.out.println();
+
+        botThree.printShipProbabilities(experimentController.getShip());
+
         */
+
 
         ExperimentController experimentController = new ExperimentController();
         experimentController.getShip().formShip();
+
         experimentController.setBotThree(0.1);
-        System.out.println(experimentController.runExperiment());
+
+        experimentController.runExperiment();
+
+
+
+
 
 	}
 
