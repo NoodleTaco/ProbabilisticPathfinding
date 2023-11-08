@@ -57,6 +57,9 @@ public class BotOne extends Bot{
         }
     }
 
+    /**
+     * Moves the bot by setting botPosition to point to the next Tile in botPath 
+     */
     protected void botMove()
     {
         if(botPath.isEmpty())
@@ -64,12 +67,14 @@ public class BotOne extends Bot{
             return;
         }
         botPosition = botPath.remove(0);
-
     }
 
+    /**
+     * Adds all tiles that are within the bot's scanning range to the nonLeakTiles set
+     * @param ship Reference of the ship where the experiment occurs
+     */
     protected void fillNonLeakTilesClose(Ship ship)
-    {
-            
+    {    
         int startX = Math.max(botPosition.getRow() - k, 0);
         int endX = Math.min(botPosition.getRow() + k,ship.getShipEdgeLength() -1);
         

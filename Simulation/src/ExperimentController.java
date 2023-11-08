@@ -7,9 +7,9 @@ public class ExperimentController{
 
     private Bot bot;
 
-    private Tile botSpawnLocation;
-
     private Tile leak;
+
+    private Tile leakTwo;
 
 
     public ExperimentController()
@@ -18,7 +18,7 @@ public class ExperimentController{
     }
 
     /**
-     * Forms ship and generates the starting positions of the bot, button, and fire
+     * Randomly spawns the bot and leak with the leak outside the bot's detection range
      */
     public void spawnOutsideOfDetection()
     {
@@ -50,6 +50,67 @@ public class ExperimentController{
         */
     }
 
+    /**
+     * Randomly spawns the bot and leak
+     */
+    public void spawnOneLeak(){
+        Random rand = new Random();
+
+        while(true)
+        {
+            Tile tile = ship.getShipTile(rand.nextInt(ship.getShipEdgeLength()), rand.nextInt(ship.getShipEdgeLength()));
+
+            if(tile.getOpen())
+            {
+                bot.setBotPosition(tile);
+                break;
+            }
+        }
+
+        while(true)
+        {
+            leak = ship.getShipTile(rand.nextInt(ship.getShipEdgeLength()), rand.nextInt(ship.getShipEdgeLength()));
+            if (!leak.equals(bot.getBotPosition()) && leak.getOpen())
+            {
+                break;
+            }
+        }
+    }
+
+    /**
+     * Spawns the bot and two leaks where both leaks are outisde the bot's scan range
+     */
+    public void spawnTwoLeaksOutsideDetection(){
+        Random rand = new Random();
+
+        while(true)
+        {
+            Tile tile = ship.getShipTile(rand.nextInt(ship.getShipEdgeLength()), rand.nextInt(ship.getShipEdgeLength()));
+
+            if(tile.getOpen())
+            {
+                bot.setBotPosition(tile);
+                break;
+            }
+        }
+        
+        while(true)
+        {
+            leak = ship.getShipTile(rand.nextInt(ship.getShipEdgeLength()), rand.nextInt(ship.getShipEdgeLength()));
+            if (!bot.sense(leak, ship) && leak.getOpen())
+            {
+                break;
+            }
+        }
+
+        while(true){
+            leakTwo = ship.getShipTile(rand.nextInt(ship.getShipEdgeLength()), rand.nextInt(ship.getShipEdgeLength()));
+            if(!bot.sense(leakTwo, ship) && leakTwo.getOpen() && !leakTwo.equals(leak)){
+                break;
+            }
+        }
+    }
+
     private boolean testSense(Tile leak, Tile botStartingPosition, int k)
     {
         int startX = Math.max(botStartingPosition.getRow() - k, 0);
@@ -65,13 +126,17 @@ public class ExperimentController{
     public int runExperiment()
     {
         int numActions = 0;
-        //int count = 25;
 
-        spawnOutsideOfDetection();
+        if(bot instanceof BotOne){
+            spawnOutsideOfDetection();
+        }
+        else if(bot instanceof BotThree){
+            spawnOneLeak();
+        }
 
-        //printShip();
+        printShip();
 
-        //System.out.println();
+        System.out.println();
         while(true)
         {
             if(bot.getBotPosition().equals(leak))
@@ -85,15 +150,43 @@ public class ExperimentController{
 
             numActions++;
 
+            printShip();
 
-            //count--;
-
-            //printShip();
-
-            //System.out.println();
+            System.out.println();
         }
 
 
+        return numActions;
+    }
+
+    public int runMultipleLeaksExperiment(){
+        int numActions = 0;
+        
+
+        spawnTwoLeaksOutsideDetection();
+
+        printShip();
+
+        System.out.println();
+
+        while(!(leak == null && leakTwo == null)){
+            if(leak != null && bot.getBotPosition().equals(leak)){
+                leak = null;
+            }
+            if(leakTwo != null && bot.getBotPosition().equals(leakTwo)){
+                leakTwo = null;
+            }
+
+            bot.setNoLeakOnBot();
+
+            bot.botAction(leak, leakTwo, ship);
+
+            numActions ++;
+
+            printShip();
+
+            System.out.println();
+        }
         return numActions;
     }
 
@@ -120,6 +213,10 @@ public class ExperimentController{
         bot = new BotFour(alpha, numSenses, numMoves);
         BotFour botFour = (BotFour)bot;
         botFour.initalizeProbabilities(ship);
+    }
+
+    public void setBotFive(int k){
+        bot = new BotFive(k);
     }
 
     public Bot getBot()
@@ -162,6 +259,8 @@ public class ExperimentController{
 
         //BotTwo botTwo = (BotTwo)bot;
 
+        BotFive botFive = (BotFive)bot;
+
         for(int row = 0; row < ship.getShipEdgeLength(); row++)
         {
             for (int col = 0; col < ship.getShipEdgeLength(); col++)
@@ -172,10 +271,17 @@ public class ExperimentController{
                     System.out.print(blue + "■ " + reset);
                 }
 
-                else if(leak.equals(ship.getShipTile(row, col)))
+                else if(ship.getShipTile(row, col).equals(leak))
                 {
                     System.out.print(purple + "■ " + reset);
                 }
+
+
+
+                else if(ship.getShipTile(row, col).equals(leakTwo)){
+                    System.out.print(purple + "■ " + reset);
+                }
+
 
 
                 else if(bot.getBotPath().contains(ship.getShipTile(row, col)))
@@ -204,80 +310,11 @@ public class ExperimentController{
                 }
                 */
 
-                else if(ship.getShipTile(row, col).getOpen())
-                {
-                    System.out.print(white + "■ " + reset);
-                }
-
-                else 
-                {
-                    System.out.print(green + "■ " + reset);
-                }
-            }
-            System.out.println();
-        }
-    }
-
-    public void printShipBotThree(){
-        String reset = "\u001B[0m";
-        String lightYellow = "\u001B[93m";
-        String red = "\u001B[31m";
-        String green = "\u001B[32m";
-        String blue = "\u001B[34m";
-        String white = "\u001B[37m";
-        String purple = "\u001B[35m";
-        String orange = "\u001B[33m";
-        String black = "\u001B[30m";
-
-
-        //BotOne botOne = (BotOne)bot;
-
-        BotTwo botTwo = (BotTwo)bot;
-
-        BotThree botThree = (BotThree)bot;
-
-        for(int row = 0; row < ship.getShipEdgeLength(); row++)
-        {
-            for (int col = 0; col < ship.getShipEdgeLength(); col++)
-            {
-
-                if(bot.getBotPosition().equals(ship.getShipTile(row, col)))
-                {
-                    System.out.print(blue + "■ " + reset);
-                }
-
-                else if(leak.equals(ship.getShipTile(row, col)))
-                {
-                    System.out.print(purple + "■ " + reset);
-                }
-
-
-                else if(bot.getBotPath().contains(ship.getShipTile(row, col)))
-                {
-                    System.out.print(red + "■ " + reset);
-                }
-
-                
-
-
-                else if(botTwo.getNonLeakTiles().contains(ship.getShipTile(row, col)))
+                else if(botFive.getNonMultipleLeakTiles().contains(ship.getShipTile(row, col)))
                 {
                      System.out.print(lightYellow + "■ " + reset);
                 }
-                
 
-                else if(botTwo.getSenseLocations().contains(ship.getShipTile(row, col)))
-                {
-                    if(ship.getShipTile(row, col).getOpen())
-                    {
-                        System.out.print(black + "■ " + reset);
-                    }
-                    else 
-                    {
-                        System.out.print(green + "■ " + reset);
-                    }
-
-                }
 
 
                 else if(ship.getShipTile(row, col).getOpen())
@@ -294,6 +331,7 @@ public class ExperimentController{
         }
     }
 
+    
     public static void main(String [] args)
 	{
         /*

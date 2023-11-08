@@ -14,7 +14,7 @@ public class Ship {
     private ArrayList<Tile> neighbors;
     private ArrayList<Tile> deadEnds;
 
-    static final int defaultShipLength = 50;
+    static final int defaultShipLength = 20;
 
     /**
      * Default constructor for a Ship with a ship edge length of 50.
@@ -475,6 +475,18 @@ public class Ship {
             isDeadEnd( deadEndNeighbors.get(randTile).getRow() , deadEndNeighbors.get(randTile).getCol() +1);
 
         }
+    }
+
+    public int getNumOpenTiles(){
+        int count = 0;
+        for(int row = 0; row < shipEdgeLength; row ++){
+            for(int col = 0; col < shipEdgeLength; col ++){
+                if(getShipTile(row, col).getOpen()){
+                    count ++;
+                }
+            }
+        }
+        return count;
     }
 
 

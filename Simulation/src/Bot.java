@@ -212,9 +212,13 @@ public abstract class Bot{
         return botPath;
     }
 
-    public abstract boolean sense(Tile leak, Ship ship);
+    public  boolean sense(Tile leak, Ship ship) {return false;};
 
-    public abstract void botAction(Tile leak, Ship ship);
+    public boolean sense (Tile leak, Tile leakTwo, Ship ship) {return false;}
+
+    public  void botAction(Tile leak, Ship ship) {};
+
+    public void botAction(Tile leak, Tile leakTwo, Ship ship) {}
 
     public abstract void setNoLeakOnBot();
 
