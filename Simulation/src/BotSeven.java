@@ -36,7 +36,7 @@ public class BotSeven extends Bot{
 
     @Override
     public boolean sense(Tile leak, Tile leakTwo, Ship ship) {
-        return probabilityRoll(formula(leak, botPosition, ship));
+        return false;
     }
 
 

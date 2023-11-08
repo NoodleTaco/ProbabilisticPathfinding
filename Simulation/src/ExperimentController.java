@@ -272,7 +272,7 @@ public class ExperimentController{
 
         //BotFive botFive = (BotFive)bot;
 
-        BotSix botSix = (BotSix)bot;
+        //BotSix botSix = (BotSix)bot;
 
         for(int row = 0; row < ship.getShipEdgeLength(); row++)
         {
@@ -289,13 +289,9 @@ public class ExperimentController{
                     System.out.print(purple + "■ " + reset);
                 }
 
-
-
                 else if(ship.getShipTile(row, col).equals(leakTwo)){
                     System.out.print(purple + "■ " + reset);
                 }
-
-
 
                 else if(bot.getBotPath().contains(ship.getShipTile(row, col)))
                 {
@@ -330,6 +326,7 @@ public class ExperimentController{
                 }
                 */
 
+                /* 
                 else if(botSix.getSenseLocationsBotSix().contains(ship.getShipTile(row, col)))
                 {
                     if(ship.getShipTile(row, col).getOpen())
@@ -347,7 +344,7 @@ public class ExperimentController{
                 {
                      System.out.print(lightYellow + "■ " + reset);
                 }
-
+                */
 
                 else if(ship.getShipTile(row, col).getOpen())
                 {

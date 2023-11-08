@@ -66,22 +66,9 @@ public class BotThree extends Bot{
         HashSet<Tile> goalSet = new HashSet<Tile>();
         goalSet.add(goal);
         ArrayList<Tile> path = new ArrayList<Tile>();
-        Set<Tile> exception = new HashSet<Tile>();
 
-        //This conditional handles a situation where the probability of a corner closed cell is being calculated and it is surrounded by closed cells
-        if(ship.isCorner(startingTile) && !startingTile.getOpen()){
-            Set<Tile> cornerSet = new HashSet<Tile>();
-            ship.fillClosedNeighborsSet(startingTile, cornerSet);
-            //The two nodes neighboring the corner are closed
-            if(cornerSet.size() ==2){
-                for(Tile tile: cornerSet){
-                    exception.add(tile);
-                }
-            }
-        }
 
-        exception.add(goal);
-        bfsInSetWithExceptions(ship, goalSet, path, startingTile, exception);
+        bfsInSet(ship, goalSet, path, startingTile);
         int dist = path.size();
         return dist;
     }
@@ -105,7 +92,7 @@ public class BotThree extends Bot{
                 updateProbabilitiesFromSense(ship, false);
             }
             updateHighestProbabilities();
-            bfsInSetWithExceptions(ship, highestProbabilties, botPath, botPosition, highestProbabilties);
+            bfsInSet(ship, highestProbabilties, botPath, botPosition);
             printShipProbabilities(ship);
         }
     }
@@ -137,6 +124,9 @@ public class BotThree extends Bot{
         //Adjust each tile's probability by dividing it by 1 - <the original probaiblity of the tile determined to have no leak>
         while(iterator.hasNext()){
             Map.Entry<Tile, Double> entry = iterator.next();
+            if(!entry.getKey().getOpen()) {
+                continue;
+            }
             double leakInJ = entry.getValue();
 
             //System.out.print("For Tile " + entry.getKey().toString() + " ");

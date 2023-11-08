@@ -14,7 +14,7 @@ public class Ship {
     private ArrayList<Tile> neighbors;
     private ArrayList<Tile> deadEnds;
 
-    static final int defaultShipLength = 20;
+    static final int defaultShipLength = 5;
 
     /**
      * Default constructor for a Ship with a ship edge length of 50.

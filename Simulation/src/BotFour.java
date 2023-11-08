@@ -41,7 +41,7 @@ public class BotFour extends BotThree{
             sensesLeft --;
             if(sensesLeft == 0){
                 updateHighestProbabilities();
-                bfsInSetWithExceptions(ship, highestProbabilties, botPath, botPosition, highestProbabilties);
+                bfsInSet(ship, highestProbabilties, botPath, botPosition);
                 trimBotPath();
             }
             printShipProbabilities(ship);
