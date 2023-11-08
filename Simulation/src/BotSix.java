@@ -1,41 +1,39 @@
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
-import java.util.ArrayList;
 
-public class BotTwo extends BotOne{
+public class BotSix extends BotFive {
+
+    protected boolean exploringSense;
 
     private HashSet<Tile> senseLocations;
 
-    private boolean firstSenseFound;
+    private HashSet<Tile> possibleSenseTile;
 
+    public BotSix() {}
 
-    public BotTwo() {}
-
-    public BotTwo(int k)
-    {
+    public BotSix(int k){
         super(k);
         senseLocations = new HashSet<Tile>();
-        firstSenseFound = false;
+        possibleSenseTile = new HashSet<Tile>();
+        exploringSense = false;
     }
 
-    public void botAction(Tile leak, Ship ship)
-    {
-        if(!firstSenseFound ) 
-        {
+    public void botAction(Tile leak, Tile leakTwo, Ship ship ){
+        if(!exploringSense){
             if(!senseLocations.isEmpty()){
-                for(Tile tile: senseLocations){
-
-                }
                 if(botPath.isEmpty() && senseLocations.contains(botPosition))
                 {
                     senseLocations.remove(botPosition);
-                    if(sense(leak, ship))
+                    if(sense(leak, leakTwo, ship))
                     {
-                        fillNonLeakTilesFar(ship);
-                        firstSenseFound = true;
+                        System.out.println("Beep");
+                        exploringSense = true;
+                        fillPossibleSenseTiles(ship);
                     }
                     else
                     {
+                        System.out.println("No Beep");
                         fillNonLeakTilesClose(ship);
                         bfsInSet(ship, senseLocations, botPath, botPosition);
                     }
@@ -49,21 +47,20 @@ public class BotTwo extends BotOne{
                 {
                     botMove();
                 }
-            } 
-            //Called when all senseLocations have been searched and no sense returned true
-            //This case happens when a sense location is placed inside a closed tile without open neighbors and the leak is in that sense's radius
+            }
             else{
                 System.out.println("Sense Locations empty, still going");
                 if(botPath.isEmpty())
                 {
-                    if(sense(leak, ship))
+                    if(sense(leak, leakTwo, ship))
                     {
-                        //System.out.println("FOUND IT \n RAHHHHHHHHHHH \n RAHHHHHHHHHHH \n RAHHHHHHHHHHH");
-                        fillNonLeakTilesFar(ship);
-                        firstSenseFound = true;
+                        System.out.println("Beep");
+                        exploringSense = true;
+                        fillPossibleSenseTiles(ship);
                     }
                     else
                     {
+                        System.out.println("No Beep");
                         fillNonLeakTilesClose(ship);
                     }
                     bfsNotInSet(ship, nonLeakTiles,botPath, botPosition);
@@ -74,21 +71,57 @@ public class BotTwo extends BotOne{
                 }
             }
         }
-        else
-        {
-            //System.out.print("First sense found already, looking for leak: ");
-            if(botPath.isEmpty())
-            {
-                //System.out.print("Finding nearest valid tile");
-                bfsNotInSet(ship, nonLeakTiles, botPath, botPosition);
+        else{
+            System.out.println("Sense Detected, finding leak...");
+            if(possibleSenseTile.isEmpty()){
+                System.out.println("Its empty why am I still running???");
             }
-            //System.out.print("Moving");
+            if(botPath.isEmpty()){
+                bfsInSet(ship, possibleSenseTile, botPath, botPosition);
+            }
+
             botMove();
-            //System.out.println();
+
+            if(botPosition.equals(leak) || botPosition.equals(leakTwo)){
+                System.out.println("Leak found");
+                possibleSenseTile.clear();
+                exploringSense = false;
+            }
+
+            
+
+        }
+
+
+    }
+    /**
+     * Fills the possibleSenseTiles set with all open tiles possibly containing the leak in the bot's sense range
+     * @param ship Reference of the experiment's ship
+     */
+    private void fillPossibleSenseTiles(Ship ship){
+        int startX = Math.max(botPosition.getRow() - k, 0);
+        int endX = Math.min(botPosition.getRow() + k,ship.getShipEdgeLength() -1);
+        
+        int startY = Math.max(botPosition.getCol() - k, 0);
+        int endY = Math.min(botPosition.getCol() + k,ship.getShipEdgeLength() -1);
+
+        for (int x = startX; x <= endX; x++)
+        {
+            for (int y = startY; y<= endY; y++)
+            {
+                if(ship.getShipTile(x, y).getOpen() && !nonLeakTiles.contains(ship.getShipTile(x, y)))
+                {
+                    possibleSenseTile.add(ship.getShipTile(x, y));
+                }
+                
+            }
         }
     }
 
-    public void setSenseLocations(Ship ship)
+
+
+
+    public void setSenseLocationsBotSix(Ship ship)
     {
         int range = ship.getShipEdgeLength() / ((2*k)+1); 
 
@@ -145,7 +178,7 @@ public class BotTwo extends BotOne{
         }
     }
 
-    private Tile getOpenNeighborIfClosed(Tile tile, Ship ship)
+        private Tile getOpenNeighborIfClosed(Tile tile, Ship ship)
     {
         if(tile.getOpen())
         {
@@ -165,19 +198,31 @@ public class BotTwo extends BotOne{
         }
     }
 
+    @Override
+    public void setNoLeakOnBot() {
+        nonLeakTiles.add(botPosition);
+        possibleSenseTile.remove(botPosition);
+    }
 
-    public HashSet<Tile> getSenseLocations()
+    public HashSet<Tile> getSenseLocationsBotSix()
     {
         return senseLocations;
     }
 
-    public void printSenseLocations()
-    {
-        for(Tile tile: senseLocations)
-        {
-            System.out.println(tile.toString());
-        }
-    }
+    public static void main(String [] args)
+	{
 
-    
+        ExperimentController experimentController = new ExperimentController();
+        experimentController.getShip().formShip();
+
+        experimentController.setBotSix(3);
+
+        System.out.println(experimentController.runMultipleLeaksExperiment());
+
+
+
+
+
+	}
+
 }
