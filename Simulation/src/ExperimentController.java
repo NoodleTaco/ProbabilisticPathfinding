@@ -134,9 +134,9 @@ public class ExperimentController{
             spawnOneLeak();
         }
 
-        printShip();
+        //printShip();
 
-        System.out.println();
+        //System.out.println();
         while(true)
         {
             if(bot.getBotPosition().equals(leak))
@@ -150,9 +150,9 @@ public class ExperimentController{
 
             numActions++;
 
-            printShip();
+            //printShip();
 
-            System.out.println();
+            //System.out.println();
         }
 
 

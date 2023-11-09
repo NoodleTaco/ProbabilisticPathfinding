@@ -29,6 +29,7 @@ public abstract class Bot{
     protected void bfsNotInSet(Ship ship, HashSet<Tile> set, ArrayList<Tile> list, Tile startingTile)
     //Hashsets are iterated without a particular order, this provides functionality that ties in distance are broken randomly. 
     {
+        
         Queue<Tile> queue = new LinkedList<>();
         Set<Tile> visited = new HashSet<>();
         Map<Tile, Tile> parent = new HashMap<>();
@@ -38,6 +39,7 @@ public abstract class Bot{
         visited.add(startingTile);
         parent.put(startingTile, null);
 
+        //Will track the goal cell when found
         Tile currentTile = startingTile;
 
         while(!queue.isEmpty())
@@ -50,8 +52,7 @@ public abstract class Bot{
                 break;
             }
 
-
-
+            
             ship.fillNeighborsSet(curr, botNeighbors);
 
             for(Tile tile : botNeighbors)
@@ -67,6 +68,7 @@ public abstract class Bot{
             botNeighbors.clear();
         }
 
+        //Generates the path backwards by going through the parent map
         while(currentTile != null)
         {
             list.add(currentTile);
@@ -74,7 +76,6 @@ public abstract class Bot{
         }
 
         
-
         Collections.reverse(list);
 
         list.remove(0);

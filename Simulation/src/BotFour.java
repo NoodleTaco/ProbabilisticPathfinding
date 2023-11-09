@@ -25,17 +25,17 @@ public class BotFour extends BotThree{
             if(botPath.size() == 0){
                 sensesLeft = numSenses;
             }
-            printShipProbabilities(ship);
+            //printShipProbabilities(ship);
         }
         else{
             if(sense(leak, ship)){
-                System.out.println("beep");
-                System.out.println();
+                //System.out.println("beep");
+                //System.out.println();
                 updateProbabilitiesFromSense(ship, true);
             }
             else{
-                System.out.println("no beep");
-                System.out.println();
+                //System.out.println("no beep");
+                //System.out.println();
                 updateProbabilitiesFromSense(ship, false);
             }
             sensesLeft --;
@@ -44,7 +44,7 @@ public class BotFour extends BotThree{
                 bfsInSet(ship, highestProbabilties, botPath, botPosition);
                 trimBotPath();
             }
-            printShipProbabilities(ship);
+            //printShipProbabilities(ship);
         }
     }
 

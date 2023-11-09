@@ -15,7 +15,7 @@ import org.knowm.xchart.style.Styler;
 
 public class ExperimentData{
 
-    static final int numExperiments = 2;
+    static final int numExperiments = 50;
 
     private double[] botOneData = new double[10];
     private double[] botTwoData = new double[10];
@@ -27,8 +27,10 @@ public class ExperimentData{
 
     static final int botFourNumSenses = 3;
     static final int botFourNumMoves = 3;
-    
 
+    private double[] botFourNumSensesTest = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    
+    private double[] botFourTestResults = new double[10];
 
     public ExperimentData(){
         
@@ -123,6 +125,37 @@ public class ExperimentData{
         new SwingWrapper<>(botThreeVSFour).displayChart();
     }
 
+    public void getBotFourVariations(int numActions){
+        int count = 0;
+        for(double numSenses: botFourNumSensesTest){
+            int[] botFourDataTotal = new int[numExperiments];
+            for(int i = 0; i < numExperiments; i++){
+                ExperimentController botFourExperimentController = new ExperimentController();
+                botFourExperimentController.getShip().formShip();
+                botFourExperimentController.setBotFour(0.2, (int)numSenses, numActions);
+                botFourDataTotal[i] = botFourExperimentController.runExperiment();
+            }
+            System.out.println("Completed numSenses: " + numSenses);
+            botFourTestResults[count] = calculateArrayAverage(botFourDataTotal);
+            count++;
+        }
+
+        XYChart botFourTestResultsChart = new XYChartBuilder()
+                .width(800)
+                .height(600)
+                .title("Bot 4 Test Results with numActions = " + numActions)
+                .xAxisTitle("numSenses")
+                .yAxisTitle("Average Number of Moves")
+                .build();
+
+        botFourTestResultsChart.addSeries("Bot 4", botFourNumSensesTest, botFourTestResults);
+
+        botFourTestResultsChart.getStyler().setMarkerSize(8);
+        botFourTestResultsChart.getStyler().setLegendPosition(Styler.LegendPosition.InsideNE);
+        
+        new SwingWrapper<>(botFourTestResultsChart).displayChart();
+    }
+
     public static double calculateArrayAverage(int[] array) {
         int sum = 0;
         for (int element : array) {
@@ -136,7 +169,7 @@ public class ExperimentData{
     public static void main(String [] args)
 	{
         ExperimentData experimentData = new ExperimentData();
-        experimentData.getBotThreeAndFourRuns();
+        experimentData.getBotFourVariations(3);
 	}
 
 }
