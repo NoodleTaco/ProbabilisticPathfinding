@@ -230,6 +230,12 @@ public class ExperimentController{
         botSix.setSenseLocationsBotSix(ship);
     }
 
+    public void setBotSeven(double alpha){
+        bot = new BotSeven(alpha);
+        BotSeven botSeven = (BotSeven)bot;
+        botSeven.initalizeProbabilities(ship);
+    }
+
     public Bot getBot()
     {
         return bot;

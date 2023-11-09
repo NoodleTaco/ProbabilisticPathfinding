@@ -52,7 +52,6 @@ public class BotThree extends Bot{
     }
     /**
      * Gives the distance from a tile to another
-     * Handles exceptions where the goal tile is closed or a corner tile surrounded by closed tiles
      * @param goal The tile being searched for 
      * @param ship The ship
      * @param startingTile The tile where the search begins 
