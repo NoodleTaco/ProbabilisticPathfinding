@@ -130,6 +130,22 @@ public class BotOne extends Bot{
         nonLeakTiles.add(botPosition);
     }
 
+    public static void main(String [] args)
+	{
+
+        ExperimentController experimentController = new ExperimentController();
+        experimentController.getShip().formShip();
+
+        experimentController.setBotOne(3);
+
+        System.out.println(experimentController.runExperiment());
+        
+
+
+
+
+	}
+
     
 
 

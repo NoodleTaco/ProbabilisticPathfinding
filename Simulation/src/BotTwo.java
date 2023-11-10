@@ -23,9 +23,7 @@ public class BotTwo extends BotOne{
         if(!firstSenseFound ) 
         {
             if(!senseLocations.isEmpty()){
-                for(Tile tile: senseLocations){
 
-                }
                 if(botPath.isEmpty() && senseLocations.contains(botPosition))
                 {
                     senseLocations.remove(botPosition);
@@ -53,7 +51,7 @@ public class BotTwo extends BotOne{
             //Called when all senseLocations have been searched and no sense returned true
             //This case happens when a sense location is placed inside a closed tile without open neighbors and the leak is in that sense's radius
             else{
-                System.out.println("Sense Locations empty, still going");
+                //System.out.println("Sense Locations empty, still going");
                 if(botPath.isEmpty())
                 {
                     if(sense(leak, ship))
@@ -110,7 +108,6 @@ public class BotTwo extends BotOne{
         {
             if(x == range-1 && extra)
             {
-                //System.out.println("Final Row with Extra: row = " + row);
                 rowToCompute = row;
             }
             else
@@ -122,12 +119,10 @@ public class BotTwo extends BotOne{
             {
                 if(y == range-1 && extra)
                 {
-                    //System.out.println("Final Col with Extra: col = " + col);
                     colToCompute = col;
                 }
                 else
                 {
-
                     colToCompute = col + k;
                 }
 
@@ -178,6 +173,22 @@ public class BotTwo extends BotOne{
             System.out.println(tile.toString());
         }
     }
+
+    public static void main(String [] args)
+	{
+
+        ExperimentController experimentController = new ExperimentController();
+        experimentController.getShip().formShip();
+
+        experimentController.setBotTwo(3);
+
+        System.out.println(experimentController.runExperiment());
+        
+
+
+
+
+	}
 
     
 }

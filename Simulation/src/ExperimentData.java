@@ -15,14 +15,14 @@ import org.knowm.xchart.style.Styler;
 
 public class ExperimentData{
 
-    static final int numExperiments = 50;
+    static final int numExperiments = 20;
 
     private double[] botOneData = new double[10];
     private double[] botTwoData = new double[10];
     private double[] kVals = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
 
-    private double[] botThreeData = new double[5];
-    private double[] botFourData = new double[5];
+    private double[] botThreeData = new double[4];
+    private double[] botFourData = new double[4];
     private double[] alphaVals = {0.1, 0.2, 0.3, 0.4};
 
     static final int botFourNumSenses = 3;
@@ -169,7 +169,7 @@ public class ExperimentData{
     public static void main(String [] args)
 	{
         ExperimentData experimentData = new ExperimentData();
-        experimentData.getBotFourVariations(3);
+        experimentData.getBotFourVariations(10);
 	}
 
 }

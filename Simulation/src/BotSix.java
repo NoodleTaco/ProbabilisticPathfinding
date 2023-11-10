@@ -8,14 +8,14 @@ public class BotSix extends BotFive {
 
     private HashSet<Tile> senseLocations;
 
-    private HashSet<Tile> possibleSenseTile;
+    private HashSet<Tile> possibleSenseTiles;
 
     public BotSix() {}
 
     public BotSix(int k){
         super(k);
         senseLocations = new HashSet<Tile>();
-        possibleSenseTile = new HashSet<Tile>();
+        possibleSenseTiles = new HashSet<Tile>();
         exploringSense = false;
     }
 
@@ -29,7 +29,7 @@ public class BotSix extends BotFive {
                     {
                         System.out.println("Beep");
                         exploringSense = true;
-                        fillPossibleSenseTiles(ship);
+                        fillPossibleSenseTiless(ship);
                     }
                     else
                     {
@@ -56,7 +56,7 @@ public class BotSix extends BotFive {
                     {
                         System.out.println("Beep");
                         exploringSense = true;
-                        fillPossibleSenseTiles(ship);
+                        fillPossibleSenseTiless(ship);
                     }
                     else
                     {
@@ -73,18 +73,16 @@ public class BotSix extends BotFive {
         }
         else{
             System.out.println("Sense Detected, finding leak...");
-            if(possibleSenseTile.isEmpty()){
-                System.out.println("Its empty why am I still running???");
-            }
+
             if(botPath.isEmpty()){
-                bfsInSet(ship, possibleSenseTile, botPath, botPosition);
+                bfsInSet(ship, possibleSenseTiles, botPath, botPosition);
             }
 
             botMove();
 
             if(botPosition.equals(leak) || botPosition.equals(leakTwo)){
                 System.out.println("Leak found");
-                possibleSenseTile.clear();
+                possibleSenseTiles.clear();
                 exploringSense = false;
             }
 
@@ -95,10 +93,10 @@ public class BotSix extends BotFive {
 
     }
     /**
-     * Fills the possibleSenseTiles set with all open tiles possibly containing the leak in the bot's sense range
+     * Fills the possibleSenseTiless set with all open tiles possibly containing the leak in the bot's sense range
      * @param ship Reference of the experiment's ship
      */
-    private void fillPossibleSenseTiles(Ship ship){
+    private void fillPossibleSenseTiless(Ship ship){
         int startX = Math.max(botPosition.getRow() - k, 0);
         int endX = Math.min(botPosition.getRow() + k,ship.getShipEdgeLength() -1);
         
@@ -111,7 +109,7 @@ public class BotSix extends BotFive {
             {
                 if(ship.getShipTile(x, y).getOpen() && !nonLeakTiles.contains(ship.getShipTile(x, y)))
                 {
-                    possibleSenseTile.add(ship.getShipTile(x, y));
+                    possibleSenseTiles.add(ship.getShipTile(x, y));
                 }
                 
             }
@@ -201,7 +199,7 @@ public class BotSix extends BotFive {
     @Override
     public void setNoLeakOnBot() {
         nonLeakTiles.add(botPosition);
-        possibleSenseTile.remove(botPosition);
+        possibleSenseTiles.remove(botPosition);
     }
 
     public HashSet<Tile> getSenseLocationsBotSix()

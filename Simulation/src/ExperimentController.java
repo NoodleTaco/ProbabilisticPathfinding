@@ -111,6 +111,13 @@ public class ExperimentController{
         }
     }
 
+    /**
+     * Spawns the bot and two leaks
+     */
+    public void spawnTwoLeaks(){
+
+    }
+
     private boolean testSense(Tile leak, Tile botStartingPosition, int k)
     {
         int startX = Math.max(botStartingPosition.getRow() - k, 0);
@@ -134,9 +141,9 @@ public class ExperimentController{
             spawnOneLeak();
         }
 
-        //printShip();
+        printShip();
 
-        //System.out.println();
+        System.out.println();
         while(true)
         {
             if(bot.getBotPosition().equals(leak))
@@ -150,9 +157,9 @@ public class ExperimentController{
 
             numActions++;
 
-            //printShip();
+            printShip();
 
-            //System.out.println();
+            System.out.println();
         }
 
 
@@ -163,7 +170,13 @@ public class ExperimentController{
         int numActions = 0;
         
 
-        spawnTwoLeaksOutsideDetection();
+        if(bot instanceof BotOne){
+            spawnTwoLeaksOutsideDetection();
+        }
+        else if(bot instanceof BotThree){
+            spawnOneLeak();
+        }
+        
 
         printShip();
 
@@ -211,13 +224,13 @@ public class ExperimentController{
     public void setBotThree(double alpha){
         bot = new BotThree(alpha);
         BotThree botThree = (BotThree)bot;
-        botThree.initalizeProbabilities(ship);
+        botThree.initializeProbabilities(ship);
     }
 
     public void setBotFour(double alpha, int numSenses, int numMoves){
         bot = new BotFour(alpha, numSenses, numMoves);
         BotFour botFour = (BotFour)bot;
-        botFour.initalizeProbabilities(ship);
+        botFour.initializeProbabilities(ship);
     }
 
     public void setBotFive(int k){
@@ -274,7 +287,7 @@ public class ExperimentController{
 
         //BotOne botOne = (BotOne)bot;
 
-        //BotTwo botTwo = (BotTwo)bot;
+        BotTwo botTwo = (BotTwo)bot;
 
         //BotFive botFive = (BotFive)bot;
 
@@ -305,6 +318,13 @@ public class ExperimentController{
                 }
 
                 /* 
+                else if(botOne.getNonLeakTiles().contains(ship.getShipTile(row, col)))
+                {
+                     System.out.print(lightYellow + "■ " + reset);
+                }
+                */
+
+
                 else if(botTwo.getNonLeakTiles().contains(ship.getShipTile(row, col)))
                 {
                      System.out.print(lightYellow + "■ " + reset);
@@ -323,7 +343,7 @@ public class ExperimentController{
                     }
 
                 }
-                */
+
 
                 /* 
                 else if(botFive.getNonMultipleLeakTiles().contains(ship.getShipTile(row, col)))

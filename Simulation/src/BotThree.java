@@ -29,7 +29,7 @@ public class BotThree extends Bot{
         highestProbabilties = new HashSet<Tile>();
     }
 
-    public void initalizeProbabilities(Ship ship){
+    public void initializeProbabilities(Ship ship){
         int numOpenTile = ship.getNumOpenTiles();
         double startingProbability = 1.0/(numOpenTile);
         for(int row = 0; row < ship.getShipEdgeLength(); row++){
@@ -77,28 +77,27 @@ public class BotThree extends Bot{
         if(!botPath.isEmpty()){
             botMove();
             botPath.clear();
-            printShipProbabilities(ship);
+            //printShipProbabilities(ship);
         }
         else{
             if(sense(leak, ship)){
-                System.out.println("beep");
-                System.out.println();
+                //System.out.println("beep");
+                //System.out.println();
                 updateProbabilitiesFromSense(ship, true);
             }
             else{
-                System.out.println("no beep");
-                System.out.println();
+                //System.out.println("no beep");
+                //System.out.println();
                 updateProbabilitiesFromSense(ship, false);
             }
             updateHighestProbabilities();
             bfsInSet(ship, highestProbabilties, botPath, botPosition);
-            printShipProbabilities(ship);
+            //printShipProbabilities(ship);
         }
     }
 
     protected void updateProbabilitiesFromSense(Ship ship, boolean beep){
         
-        //System.out.println("Updating Probabilities From Sense: \n");
 
         Iterator<Map.Entry<Tile, Double>> firstRun = tileProbabilities.entrySet().iterator();
 
@@ -116,7 +115,7 @@ public class BotThree extends Bot{
             beepInI = 1 - beepInI;
         }
 
-        //System.out.println("P(Beep in i ) = " + beepInI + "\n");
+
         
         Iterator<Map.Entry<Tile, Double>> iterator = tileProbabilities.entrySet().iterator();
 
@@ -128,22 +127,13 @@ public class BotThree extends Bot{
             }
             double leakInJ = entry.getValue();
 
-            //System.out.print("For Tile " + entry.getKey().toString() + " ");
-
-            //System.out.print("P(leak in j) = " + leakInJ + " ");
-
             double beepInIGivenLeakInJ = formula(entry.getKey(), botPosition, ship);
 
             if(!beep){
                 beepInIGivenLeakInJ = 1 - beepInIGivenLeakInJ;
             }
 
-            //System.out.print("P(beep in i | leak in j) = " + beepInIGivenLeakInJ + " ");
-
-            //Update the probability of cell j through formula P(leak in j | beep in cell i) = P(beep in cell i | leak in j) * P(leak in j) / P(beep in i)
             tileProbabilities.put(entry.getKey(), leakInJ * beepInIGivenLeakInJ / beepInI);
-
-            //System.out.println();
         }
     }
 
