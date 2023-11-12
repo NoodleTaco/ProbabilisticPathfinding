@@ -63,7 +63,7 @@ public class BotFour extends BotThree{
         ExperimentController experimentController = new ExperimentController();
         experimentController.getShip().formShip();
 
-        experimentController.setBotFour(0.1, 3, 3);
+        experimentController.setBotFour(0.1, 1, 1);
 
         System.out.println(experimentController.runExperiment());
 

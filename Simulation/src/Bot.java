@@ -102,7 +102,7 @@ public abstract class Bot{
 
             if(curr.getOpen() && set.contains(curr))
             {
-                System.out.println("In BFS found goal: " + curr);
+                //System.out.println("In BFS found goal: " + curr);
                 currentTile = curr;
                 break;
             }

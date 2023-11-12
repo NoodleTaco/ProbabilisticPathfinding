@@ -169,9 +169,9 @@ public class ExperimentController{
             spawnOneLeak();
         }
 
-        printShip();
+        //printShip();
 
-        System.out.println();
+        //System.out.println();
         while(true)
         {
             if(bot.getBotPosition().equals(leak))
@@ -185,9 +185,9 @@ public class ExperimentController{
 
             numActions++;
 
-            printShip();
+            //printShip();
 
-            System.out.println();
+            //System.out.println();
         }
 
 
@@ -293,6 +293,13 @@ public class ExperimentController{
         BotEight botEight = (BotEight)bot;
         botEight.initializeTilePairDistances(ship);
         botEight.initalizeProbabilities();
+    }
+
+    public void setBotNine(double alpha, int numSenses, int numMoves){
+        bot = new BotNine(alpha, numSenses, numMoves);
+        BotNine botNine = (BotNine)bot;
+        botNine.initializeTilePairDistances(ship);
+        botNine.initalizeProbabilities();
     }
 
     public Bot getBot()

@@ -52,40 +52,40 @@ public class BotEight extends Bot {
     @Override
     public void botAction(Tile leak, Tile leakTwo, Ship ship) {
         if(!botPath.isEmpty()){
-            System.out.println("Bot Moving");
+            //System.out.println("Bot Moving");
             botMove();
         }
         else{
             if(sense(leak, leakTwo, ship)){
-                System.out.println("beep");
-                System.out.println();
+                //System.out.println("beep");
+                //System.out.println();
                 updateProbabilitiesFromSense(ship, true);
             }
             else{
-                System.out.println("no beep");
-                System.out.println();
+                //System.out.println("no beep");
+                //System.out.println();
                 updateProbabilitiesFromSense(ship, false);
             }
             HashSet<Tile> highestTilesSet = new HashSet<>();
             for(TilePair tilePair: highestPairProbability){
-                System.out.println("tilePair tileOne: " + tilePair.getTileOne() + " tilePair tileTwo: " + tilePair.getTileTwo() + " leak: " + getFoundLeak() + " botPosition: " + botPosition);
+                //System.out.println("tilePair tileOne: " + tilePair.getTileOne() + " tilePair tileTwo: " + tilePair.getTileTwo() + " leak: " + getFoundLeak() + " botPosition: " + botPosition);
                 if(!tilePair.getTileOne().equals(botPosition) && !tilePair.getTileOne().equals(getFoundLeak())){
-                    System.out.println("Im Fucking Adding");
+
                     highestTilesSet.add(tilePair.getTileOne());
                 }
                 else if(!tilePair.getTileTwo().equals(botPosition) && !tilePair.getTileTwo().equals(getFoundLeak())){
-                    System.out.println("Im Fucking Adding");
+
                     highestTilesSet.add(tilePair.getTileTwo());
                 }
                 
             }
             if(highestTilesSet.isEmpty()){
-                System.out.println("What the barnacle");
+                //System.out.println("What the barnacle");
             }
 
             Iterator<TilePair> iterator = highestPairProbability.iterator();
             TilePair highestTilePair = iterator.next();
-            System.out.println("Constructing Path: " + "Highest Probability is at least on Tile:  " + highestTilePair  + " with probability: " + tilePairProbabilities.get(highestTilePair)  + " Bot Position: " + botPosition);
+            //System.out.println("Constructing Path: " + "Highest Probability is at least on Tile:  " + highestTilePair  + " with probability: " + tilePairProbabilities.get(highestTilePair)  + " Bot Position: " + botPosition);
             bfsInSet(ship, highestTilesSet, botPath, botPosition);
 
         }
@@ -96,7 +96,7 @@ public class BotEight extends Bot {
 
         //calculate the chance of a beep occuring in tile k once 
         for(TilePair tilePair: tilePairProbabilities.keySet()){
-            System.out.println("beepInK += " + "tilePairProbabilities.get(tilePair): " + tilePairProbabilities.get(tilePair) + " * " + " probabilityBeepInKGivenLeaks(botPosition, tilePair.getTileOne(), tilePair.getTileTwo(), ship)): "+ probabilityBeepInKGivenLeaks(botPosition, tilePair.getTileOne(), tilePair.getTileTwo(), ship));
+            //System.out.println("beepInK += " + "tilePairProbabilities.get(tilePair): " + tilePairProbabilities.get(tilePair) + " * " + " probabilityBeepInKGivenLeaks(botPosition, tilePair.getTileOne(), tilePair.getTileTwo(), ship)): "+ probabilityBeepInKGivenLeaks(botPosition, tilePair.getTileOne(), tilePair.getTileTwo(), ship));
             beepInK += tilePairProbabilities.get(tilePair) * probabilityBeepInKGivenLeaks(botPosition, tilePair.getTileOne(), tilePair.getTileTwo(), ship);
         }
 
@@ -105,7 +105,7 @@ public class BotEight extends Bot {
             beepInK = 1 - beepInK;
         }
 
-        System.out.println("P(beep in K ) = " + beepInK  + "\n");
+        //System.out.println("P(beep in K ) = " + beepInK  + "\n");
 
         double max = 0;
         if(!highestPairProbability.isEmpty()){
@@ -123,7 +123,7 @@ public class BotEight extends Bot {
                 beepInKGivenLeakInPair = 1 - beepInKGivenLeakInPair;
             }
 
-            System.out.println("For Tile Pair: " + tilePair.toString() + " P(beep in K | Leak in Pair) = " + beepInKGivenLeakInPair + " P(leaks in Pair) = " + leaksInPair);
+            //System.out.println("For Tile Pair: " + tilePair.toString() + " P(beep in K | Leak in Pair) = " + beepInKGivenLeakInPair + " P(leaks in Pair) = " + leaksInPair);
 
             double newPairProbability = leaksInPair * beepInKGivenLeakInPair / beepInK;
 
@@ -147,7 +147,7 @@ public class BotEight extends Bot {
             sum += tilePairProbabilities.get(tilePair);
         }
 
-        System.out.println("Sum after updateTileProbabilities = " + sum);
+        //System.out.println("Sum after updateTileProbabilities = " + sum);
         
 
     }
@@ -165,11 +165,11 @@ public class BotEight extends Bot {
      */
     private double probabilityBeepInKGivenLeaksAccountingForFoundLeek(Tile beepTile, Tile leakOne, Tile leakTwo, Ship ship){
         if(leakOne.equals(leak)){
-            System.out.println("probabilityBeepInKGivenLeaks leak provided, returning formula: " + formula(leakTwo, beepTile, ship));
+            //System.out.println("probabilityBeepInKGivenLeaks leak provided, returning formula: " + formula(leakTwo, beepTile, ship));
             return formula(leakTwo, beepTile, ship);
         }
         if(leakTwo.equals(leak)){
-            System.out.println("probabilityBeepInKGivenLeaks leak provided, returning formula: " + formula(leakOne, beepTile, ship));
+            //.out.println("probabilityBeepInKGivenLeaks leak provided, returning formula: " + formula(leakOne, beepTile, ship));
             return formula(leakOne, beepTile, ship);
         }
         return 1.0 - ((1.0 - formula(leakOne, beepTile, ship)) * (1 - formula(leakTwo, beepTile, ship)));
@@ -301,18 +301,18 @@ public class BotEight extends Bot {
             sum += tilePairProbabilities.get(tilePair);
         }
 
-        System.out.println("Sum after setNOLeakOnBot = " + sum);
+        //System.out.println("Sum after setNOLeakOnBot = " + sum);
         
     }
 
     //Initalizes th leak reference and sets the probability of all pairs that don't contain the leak already found to 0
     public void setLeakOnBot(){
         leak = botPosition;
-        System.out.println("Found first leak: " + leak);
+        //System.out.println("Found first leak: " + leak);
         double probabilityOffset = 0;
         for(TilePair tilePair: tilePairProbabilities.keySet()){
             if(!tilePair.containsTile(leak)){
-                System.out.println("Tile Pair: " + tilePair + " does not contain leak, setting probability to 0");
+                //System.out.println("Tile Pair: " + tilePair + " does not contain leak, setting probability to 0");
                 probabilityOffset += tilePairProbabilities.get(tilePair);
                 tilePairProbabilities.put(tilePair, 0.0);
                 highestPairProbability.remove(tilePair);
@@ -328,7 +328,7 @@ public class BotEight extends Bot {
             sum += tilePairProbabilities.get(tilePair);
         }
 
-        System.out.println("Sum after setLeakOnBot = " + sum + " and leak: " + leak);
+        //System.out.println("Sum after setLeakOnBot = " + sum + " and leak: " + leak);
 
     }
 
@@ -343,7 +343,7 @@ public class BotEight extends Bot {
             botPosition = toMove;
         }
         else{
-            System.out.println("Why he closed tho");
+            //System.out.println("Why he closed tho");
         }
 
     }

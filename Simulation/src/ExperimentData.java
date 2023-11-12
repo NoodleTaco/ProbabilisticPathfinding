@@ -21,12 +21,12 @@ public class ExperimentData{
     private double[] botTwoData = new double[10];
     private double[] kVals = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
 
-    private double[] botThreeData = new double[4];
-    private double[] botFourData = new double[4];
-    private double[] alphaVals = {0.1, 0.2, 0.3, 0.4};
+    private double[] botThreeData = new double[8];
+    private double[] botFourData = new double[8];
+    private double[] alphaVals = {0.05, 0.1, 0.15, 0.2, 0.25, 0.30, 0.35, 0.4};
 
-    static final int botFourNumSenses = 3;
-    static final int botFourNumMoves = 3;
+    static final int botFourNumSenses = 10;
+    static final int botFourNumMoves = 10;
 
     private double[] botFourNumSensesTest = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
     
@@ -117,7 +117,7 @@ public class ExperimentData{
                 .build();
 
         botThreeVSFour.addSeries("Bot 3", alphaVals, botThreeData);
-        botThreeVSFour.addSeries("Bot ", alphaVals, botFourData);
+        botThreeVSFour.addSeries("Bot 4", alphaVals, botFourData);
 
         botThreeVSFour.getStyler().setMarkerSize(8);
         botThreeVSFour.getStyler().setLegendPosition(Styler.LegendPosition.InsideNE);
@@ -134,6 +134,7 @@ public class ExperimentData{
                 botFourExperimentController.getShip().formShip();
                 botFourExperimentController.setBotFour(0.2, (int)numSenses, numActions);
                 botFourDataTotal[i] = botFourExperimentController.runExperiment();
+                System.out.println("Test completed");
             }
             System.out.println("Completed numSenses: " + numSenses);
             botFourTestResults[count] = calculateArrayAverage(botFourDataTotal);
@@ -169,7 +170,7 @@ public class ExperimentData{
     public static void main(String [] args)
 	{
         ExperimentData experimentData = new ExperimentData();
-        experimentData.getBotFourVariations(10);
+        experimentData.getBotOneAndTwoRuns();
 	}
 
 }
