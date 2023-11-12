@@ -76,7 +76,6 @@ public class BotThree extends Bot{
     public void botAction(Tile leak, Ship ship) {
         if(!botPath.isEmpty()){
             botMove();
-            botPath.clear();
             //printShipProbabilities(ship);
         }
         else{

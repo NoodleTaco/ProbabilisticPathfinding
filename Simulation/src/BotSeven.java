@@ -40,21 +40,17 @@ public class BotSeven extends Bot{
 
 
     /**
-     * Runs sense(Tile leak, ship ship) on the closer leak
+     * Overloaded sense method for two leaks
+     * Run sense on both leaks and if either returns true, returns true
      */
     @Override
     public boolean sense(Tile leak, Tile leakTwo, Ship ship) {
-        HashSet<Tile> leakSet = new HashSet<Tile>();
-        leakSet.add(leak); leakSet.add(leakTwo);
-        ArrayList<Tile> list = new ArrayList<Tile>();
-        bfsInSet(ship, leakSet, list, botPosition);
-
-        if(list.isEmpty()){
-            return false;
-        }
-        return sense(list.get(list.size()-1), ship);
+        return sense(leak, ship) || sense(leakTwo, ship);
     }
 
+    /**
+     * Same Sense method as Bot 3 
+     */
     @Override
     public boolean sense(Tile leak, Ship ship) {
         return probabilityRoll(formula(leak, botPosition, ship));
@@ -99,7 +95,6 @@ public class BotSeven extends Bot{
     public void botAction(Tile leak, Tile leakTwo, Ship ship) {
         if(!botPath.isEmpty()){
             botMove();
-            botPath.clear();
             printShipProbabilities(ship);
         }
         else{

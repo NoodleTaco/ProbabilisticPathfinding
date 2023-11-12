@@ -162,4 +162,16 @@ public class Tile {
         return "(" + this.row + " , " + this.col + ")";
     }
 
+
+    @Override
+public int hashCode() {
+    int result = 17; // Start with a prime number
+
+    // Combine hash codes of fields
+    result = 31 * result + row;
+    result = 31 * result + col;
+
+    return result;
+}
+
 }
